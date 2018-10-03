@@ -28,22 +28,11 @@ export function parse() {
         decodeURI(search.substring(1)) :
         '';
 
-    if (query) {
+    if (query !== '') {
         const keyValues = query.split('&');
         for (const keyValue of keyValues) {
-            const equalIndex = keyValue.indexOf('=');
-            if (equalIndex === -1) {
-                // Query string such as www.bobskitchen.com?id=2&menu
-                queryHash[keyValue] = '';
-            } else {
-                const key = keyValue.substring(0, equalIndex);
-                if (equalIndex < (keyValue.length - 1)) {
-                    queryHash[key] = keyValue.substr(equalIndex + 1);
-                } else {
-                    // Query string such as www.bobskitchen.com?id=2&menu=
-                    queryHash[key] = '';
-                }
-            }
+            const tokens = keyValue.split('=');
+            queryHash[tokens[0]] = (tokens.length === 2) ? tokens[1] : '';
         }
     }
 }
